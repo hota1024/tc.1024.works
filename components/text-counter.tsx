@@ -27,14 +27,17 @@ export function TextCounter(props: TextCounterProps) {
   const [value, setValue] = useState(initialValue);
   const [maxLength, setMaxLength] = useState(initialMaxLength);
 
+  // 改行を削除
+  const textToCount = useMemo(() => value.replaceAll("\n", ""), [value]);
+  // 文字数をカウント
   const valueLength = useMemo(
-    () => [...segmenter.segment(value)].length,
-    [value],
+    () => [...segmenter.segment(textToCount)].length,
+    [textToCount]
   );
   const progress = Math.max(valueLength / maxLength, 0);
 
   const lengthClassNames = cn(
-    "text-lg! font-bold w-[100px] text-center bg-muted h-12 flex items-center justify-center rounded-md border border-border bg-background! font-mono",
+    "text-lg! font-bold w-[100px] text-center bg-muted h-12 flex items-center justify-center rounded-md border border-border bg-background! font-mono"
   );
 
   return (
