@@ -1,10 +1,10 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import { useMemo, useState } from "react";
-import { Input } from "./ui/input";
 import { SlashIcon } from "lucide-react";
+import { useMemo, useState } from "react";
 import { noop } from "@/lib/noop";
+import { cn } from "@/lib/utils";
+import { Input } from "./ui/input";
 
 export interface TextCounterProps {
   className?: string;
@@ -29,12 +29,12 @@ export function TextCounter(props: TextCounterProps) {
 
   const valueLength = useMemo(
     () => [...segmenter.segment(value)].length,
-    [value]
+    [value],
   );
   const progress = Math.max(valueLength / maxLength, 0);
 
   const lengthClassNames = cn(
-    "text-lg! font-bold w-[100px] text-center bg-muted h-12 flex items-center justify-center rounded-md border border-border bg-background! font-mono"
+    "text-lg! font-bold w-[100px] text-center bg-muted h-12 flex items-center justify-center rounded-md border border-border bg-background! font-mono",
   );
 
   return (

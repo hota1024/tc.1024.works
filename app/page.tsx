@@ -7,11 +7,11 @@ import { ThemeToggle } from "@/components/theme-toggle";
 export default function Home() {
   const [maxLength, setMaxLength] = useLocalStorage(
     "te.1024.works.text_counter.max_length",
-    2000
+    2000,
   );
   const [value, setValue] = useLocalStorage(
     "te.1024.works.text_counter.value",
-    ""
+    "",
   );
 
   return (
