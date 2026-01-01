@@ -6,12 +6,17 @@ import { noop } from "@/lib/noop";
 import { cn } from "@/lib/utils";
 import { Input } from "./ui/input";
 
+export interface TextCounterOptions {
+  ignoreNewline?: boolean;
+}
+
 export interface TextCounterProps {
   className?: string;
   initialValue?: string;
   onValueChange?: (value: string) => void;
   initialMaxLength?: number;
   onMaxLengthChange?: (maxLength: number) => void;
+  options?: TextCounterOptions;
 }
 
 const segmenter = new Intl.Segmenter("ja", { granularity: "grapheme" });
@@ -22,13 +27,19 @@ export function TextCounter(props: TextCounterProps) {
     onMaxLengthChange = noop,
     initialValue = "",
     onValueChange = noop,
+    options,
   } = props;
+
+  const ignoreNewline = options?.ignoreNewline ?? false;
 
   const [value, setValue] = useState(initialValue);
   const [maxLength, setMaxLength] = useState(initialMaxLength);
 
   // 改行を削除
-  const textToCount = useMemo(() => value.replaceAll("\n", ""), [value]);
+  const textToCount = useMemo(
+    () => (ignoreNewline ? value.replaceAll("\n", "") : value),
+    [value, ignoreNewline]
+  );
   // 文字数をカウント
   const valueLength = useMemo(
     () => [...segmenter.segment(textToCount)].length,
