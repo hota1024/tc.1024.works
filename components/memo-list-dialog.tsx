@@ -14,7 +14,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 
 export interface MemoListDialogProps {
@@ -107,7 +106,7 @@ export function MemoListDialog({
         </form>
 
         {/* 一覧 */}
-        <ScrollArea className="h-[320px] pr-3">
+        <div className="max-h-[320px] overflow-y-auto pr-1">
           {sortedMemos.length === 0 ? (
             <p className="py-8 text-center text-sm text-muted-foreground">
               保存された文章はまだありません
@@ -131,7 +130,7 @@ export function MemoListDialog({
                       className="min-w-0 flex-1 text-left"
                       onClick={() => openMemo(memo.slug)}
                     >
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 min-w-0">
                         <span className="truncate font-mono font-medium">
                           {memo.slug}
                         </span>
@@ -151,6 +150,7 @@ export function MemoListDialog({
                     <Button
                       variant="ghost"
                       size="icon"
+                      className="shrink-0"
                       aria-label={`${memo.slug} を削除`}
                       onClick={() => onDelete(memo.slug)}
                     >
@@ -161,7 +161,7 @@ export function MemoListDialog({
               })}
             </ul>
           )}
-        </ScrollArea>
+        </div>
       </DialogContent>
     </Dialog>
   );
