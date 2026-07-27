@@ -2,6 +2,8 @@
 
 import { SlashIcon } from "lucide-react";
 import { useMemo, useState } from "react";
+import { MarkdownEditor } from "@/components/markdown-editor";
+import type { EditorMode } from "@/hooks/use-memos";
 import { noop } from "@/lib/noop";
 import { cn } from "@/lib/utils";
 import { Input } from "./ui/input";
@@ -17,6 +19,8 @@ export interface TextCounterProps {
   initialMaxLength?: number;
   onMaxLengthChange?: (maxLength: number) => void;
   options?: TextCounterOptions;
+  /** エディタの表示モード（Plain Text / Markdown） */
+  mode?: EditorMode;
 }
 
 const segmenter = new Intl.Segmenter("ja", { granularity: "grapheme" });
@@ -28,6 +32,7 @@ export function TextCounter(props: TextCounterProps) {
     initialValue = "",
     onValueChange = noop,
     options,
+    mode = "plain",
   } = props;
 
   const ignoreNewline = options?.ignoreNewline ?? false;
@@ -46,6 +51,11 @@ export function TextCounter(props: TextCounterProps) {
     [textToCount]
   );
   const progress = Math.max(valueLength / maxLength, 0);
+
+  const handleValueChange = (next: string) => {
+    setValue(next);
+    onValueChange(next);
+  };
 
   const lengthClassNames = cn(
     "text-lg! font-bold w-[100px] text-center bg-muted h-12 flex items-center justify-center rounded-md border border-border bg-background! font-mono"
@@ -79,18 +89,22 @@ export function TextCounter(props: TextCounterProps) {
             }}
           />
         </div>
-        <textarea
-          id="text"
-          className="resize-none notranslate text-2xl font-bold bg-background outline-none p-4 rounded-lg border font-mono"
-          autoFocus
-          translate="no"
-          value={value}
-          onChange={(e) => {
-            const value = e.target.value;
-            setValue(value);
-            onValueChange(value);
-          }}
-        ></textarea>
+        {mode === "markdown" ? (
+          <MarkdownEditor
+            className="min-h-0"
+            initialValue={initialValue}
+            onChange={handleValueChange}
+          />
+        ) : (
+          <textarea
+            id="text"
+            className="resize-none notranslate text-2xl font-bold bg-background outline-none p-4 rounded-lg border font-mono"
+            autoFocus
+            translate="no"
+            value={value}
+            onChange={(e) => handleValueChange(e.target.value)}
+          ></textarea>
+        )}
       </div>
     </div>
   );
